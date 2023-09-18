@@ -2,21 +2,19 @@ from typing import Dict
 
 from config import get_config
 from funcs.tools import is_intstr
-from .core import GridSpace, BoardVector, CharacterManager, Character
+from ..core import GridSpace, BoardVector, CharacterManager, Character
 from bot_core.signals import OutOfBounds
 
-class StageResponse:
-    class Fail:
+
+class Stage:
+    def __init__(self, board_size: int):
+        self.board_size = board_size
+        self.chars = CharacterManager(set())
+
+    def newc(self, char_id):
         pass
 
-    class Success:
-        pass
-    
-    def __init__(self, status: Fail| Success, description):
-        self.status = status
-        self.description = description
-
-class Stage(GridSpace):
+'''class StageO(GridSpace):
     def __init__(self, size: BoardVector):
         GridSpace.__init__(self, size)
         self.chars = CharacterManager(set())
@@ -38,10 +36,10 @@ class Stage(GridSpace):
         new_pos = BoardVector(**new_pos_data)
         self.InputValidityChecker.movement(self, new_pos)
         char.move_to(new_pos)
-        return
+        return'''
 
 
-class InputValidityChecker:
+'''class InputValidityChecker:
     class NoSuchCareer(Exception):
         def __init__(self, career: str):
             super().__init__(career)
@@ -62,4 +60,4 @@ class InputValidityChecker:
         if career not in all_careers:
             raise InputValidityChecker.NoSuchCareer(career)
         if not is_intstr(team_id_str):
-            raise InputValidityChecker.TeamIDMustBeNumber
+            raise InputValidityChecker.TeamIDMustBeNumber'''
