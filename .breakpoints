@@ -1,0 +1,34 @@
+{
+  "files": {
+    "bot_core/keep_alive.py": [
+      {
+        "id": "e106ae11-afa4-4042-b09e-578ba3fa2347",
+        "line": 1,
+        "version": 1,
+        "index": 0
+      }
+    ],
+    "config/settings.json": [
+      {
+        "id": "a1ecbc45-5b43-42f5-a4f7-88cc66f52937",
+        "line": 4,
+        "version": 222,
+        "index": 119
+      },
+      {
+        "id": "9febea3a-4ce5-430b-aef6-e695a64f130c",
+        "line": 7,
+        "version": 222,
+        "index": 186
+      }
+    ],
+    "funcs/cellwar/runtime.py": [
+      {
+        "id": "9683b0e2-07f2-4de3-a67b-5d500ff1f7a2",
+        "line": 353,
+        "version": 10578,
+        "index": 11683
+      }
+    ]
+  }
+}

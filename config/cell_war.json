@@ -1,0 +1,19 @@
+{
+    "board_max_square_size": 20,
+    "char_properties": 
+    {
+        "base": {
+            "mhp": 1000,
+            "mmp": 1000,
+            "at": 10000,
+            "sp": 1000,
+            "df": 10000,
+            "mv": 6,
+            "skill_list": ["attack"],
+            "career": "base"
+        }
+    },
+    "careers":[
+        "base"
+    ]
+}
