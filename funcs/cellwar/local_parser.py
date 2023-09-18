@@ -24,8 +24,8 @@ class IllegalInstruction(Exception):
 
 
 def parse(s):
-    from string import ascii_lowercase
-    LEGAL_CHARACTER = list(ascii_lowercase) + [str(i) for i in range(0,10)]
+    from string import ascii_lowercase, ascii_uppercase
+    LEGAL_CHARACTER = list(ascii_lowercase) + list(ascii_uppercase) + [str(i) for i in range(0,10)]
     li = s.split(" ")
     if li[0][0] != COMMAND_INDICATOR:
         raise IllegalInstruction(f"command starts without `{COMMAND_INDICATOR}`", s, 0)
