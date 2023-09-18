@@ -1,50 +1,80 @@
+from typing import Dict, Tuple
+
+from funcs.tools import is_intstr
+
 from ... import local_parser
+from .parsing_stage import Stage
 
 
 class IllegalOperation(Exception):
-    def __init__(self, di):
-        super().__init__()
-        self.detail = di
+    def __init__(self, reason: str, di = {}):
+        detail = {"reason": reason}
+        detail.update(di)
+        super().__init__(str(detail))
+        self.detail = detail
+
+class Player:
+    def __init__(self, client_id: int) -> None:
+        self.client_id = client_id
+        self.controlling_char_ids = set()
 
 class Runtime:
     def __init__(self):
-        pass
-    def init(self, cmd):
-        pass
+        self.session = ["init"]
+        
+    def init(self, cmd) -> Dict:
+        self.session = ["newc", "start"]
+        for s in ["client_id, board_size"]:
+            if not is_intstr(cmd[s]):
+                raise IllegalOperation(
+                    "argument with inaprropriate input",
+                    {
+                        "argument": s,
+                        "input value": cmd[s],
+                        "input should be": "a number"
+                    }
+                )
+        self.initializer_id = int(cmd["client_id"])
+        self.stage = Stage(int(cmd["board_size"]))
+        return {}
 
     def newc(self, cmd):
         pass
 
-    def start(self, cmd):
+    def start(self, _cmd):
+        self.do_turn()
+
+    def do_turn(self):
         pass
 
     def move(self, cmd):
         pass
 
-    def inp(self,s):
+    def inp(self,s) -> Tuple[str, Dict]:
         try:
             cmd = local_parser.parse(s)
         except local_parser.IllegalInstruction as err:
-            return ("none", {
-            "detail": str(err)
+            return "none", {
+                "detail": str(err)
             }
-            )
+            
         try:
-            if cmd["command"] == "init":
-                self.init(cmd)
-            elif cmd["command"] == "newc":
-                self.newc(cmd)
-            elif cmd["command"] == "start":
-                self.start(cmd)
-            elif cmd["command"] == "move":
-                self.move(cmd)
-            else:
-                return ("none", {
-                    "inp": cmd})
+            for instruction in [self.init, self.newc, self.start, self.move]:
+                if cmd["command"] == instruction.__name__:
+                    if  instruction.__name__ in self.session:
+                        return "ok", instruction(cmd)
+                    else:
+                        raise IllegalOperation(
+                            reason = "instruction in inappropriate timing",
+                            di = {
+                                "input instruction": cmd["command"],
+                                "current session": self.session
+                            }
+                        )
+                continue
+            return "none", {"inp": cmd["command"]}
         except IllegalOperation as err:
             return ("err", err.detail)
-
-        return "ok", {"inp": cmd}
 
 
 def main():
@@ -53,7 +83,9 @@ def main():
         "/jti",
         # none
         "/start nfowkg",
-        # err: `start` in inappropriate timing
+        # err: instruction in inappropriate timing
+            # input instruction: `start`
+            # current session: `init`
         "/init -client_id 123 -board_size ASQT",
         # err: argument with inaprropriate input
             # argument: board_size
